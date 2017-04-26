@@ -4,14 +4,26 @@
 	<p>Share this link with your friends to ponvert them!</p>
 </div>
 
+<p>Ponz Pointz: {{user.points}}</p>
+<p>{{user.level}}</p>
+
 <p>Children:</p>
 
 <ul>
-{{#each user.children as |child|}}
-<li>{{child}}</li>
-{{/each}}
+	{{#each user.children as |child1|}}
+		<li>40P! {{child1.username}} ponverted on {{child1.createdAt}}</li>
+		<ul>
+		{{#each child1.children as |child2|}}
+			<li>20P! {{child2.username}} ponverted on {{child2.createdAt}}</li>
+			<ul>
+			{{#each child2.children as |child3|}}
+				<li>10P! {{child3.username}} ponverted on {{child3.createdAt}}</li>
+			{{/each}}
+			</ul>	
+		{{/each}}
+		</ul>
+	{{/each}}
 </ul>
 
 
-<p>{{user.points}}</p>
-<p>{{user.level}}</p>
+
