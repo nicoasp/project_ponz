@@ -12,15 +12,18 @@ const UserSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: "User"
       }
-    ]
+    ],
+    level: {type: Number},
+    parentId: {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    },
+    points: {type: Number}
   },
   {timestamps: true}
 );
 
 UserSchema.plugin(uniqueValidator);
-
-
-
 
 UserSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.passwordHash);

@@ -11,7 +11,6 @@ const passport = require("passport");
 //Login Routes
 ////
 router.get("/", (req, res) => {
-  
   if (req.user) {
     res.render("home", {user: req.user});
   } else {
@@ -41,13 +40,15 @@ router.post("/register/:id", (req, res, next) => {
   referrerId = req.params.id;
   const {username, password} = req.body;
   const children = [];
-  const user = new User({username, password, children});
+  const parentId = referrerId;
+  const user = new User({username, password, children, parentId});
   user.save((err, user) => {
     console.log(err);
     console.log("saved new user", user);
     User.findByIdAndUpdate(referrerId, {
-      $push: {"children": user._id}
+      $push: {children: user._id}
     }).then(updatedUser => {
+      user.level = updatedUser.level + 1;
       console.log("updated parent user", updatedUser);
       req.login(user, function(err) {
         if (err) {
