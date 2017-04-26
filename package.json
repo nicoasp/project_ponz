@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "express-handlebars": "^3.0.0",
+    "express-session": "^1.15.2",
+    "flash": "^1.1.0",
+    "mongoose": "^4.9.6",
+    "passport": "^0.3.2"
+
+  },
+  "name": "ponz.io",
+  "version": "1.0.0",
+  "main": "app.js",
+  "repository": "https://github.com/markmarkyesyes/project_ponz",
+  "author": "markmarkyesyes <markhahn545@gmail.com>",
+  "license": "MIT"
+}
