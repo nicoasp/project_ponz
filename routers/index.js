@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {User} = require("../models")
+const {User} = require("../models");
 
 ////
 //Passport & Strategies
@@ -12,7 +12,7 @@ const passport = require("passport");
 ////
 router.get("/", (req, res) => {
   if (req.user) {
-    res.render("home", { user: req.user });
+    res.render("home", {user: req.user});
   } else {
     res.redirect("/login");
   }
@@ -22,8 +22,9 @@ router.get("/login", (req, res) => {
   res.render("login");
 });
 
-router.get("/register", (req, res) => {
-  res.render("register");
+router.get("/register/:id", (req, res) => {
+  referralId = req.params.id;
+  res.render("register", {referralId});
 });
 
 router.post(
@@ -35,15 +36,21 @@ router.post(
   })
 );
 
-router.post("/register", (req, res, next) => {
-  const { username, password } = req.body;
-  const user = new User({ username, password });
+router.post("/register/:id", (req, res, next) => {
+  referrerId = req.params.id;
+  const {username, password} = req.body;
+  const children = [];
+  const user = new User({username, password, children});
   user.save((err, user) => {
-    req.login(user, function(err) {
-      if (err) {
-        return next(err);
-      }
-      return res.redirect("/");
+    User.findByIdandUpdate(referrerId, {
+      $push: {$children: user.id}
+    }).then(updatedUser => {
+      req.login(user, function(err) {
+        if (err) {
+          return next(err);
+        }
+        return res.redirect("/");
+      });
     });
   });
 });

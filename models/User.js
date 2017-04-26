@@ -1,11 +1,21 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const uniqueValidator = require("mongoose-unique-validator");
+const Schema = mongoose.Schema;
 
-const UserSchema = mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  passwordHash: { type: String }
-});
+const UserSchema = new Schema(
+  {
+    username: {type: String, required: true, unique: true},
+    passwordHash: {type: String},
+    children: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+      }
+    ]
+  },
+  {timestamps: true}
+);
 
 UserSchema.plugin(uniqueValidator);
 
