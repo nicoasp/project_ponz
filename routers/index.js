@@ -48,32 +48,34 @@ router.post(
   })
 );
 
-let pointsModel = distance => {
-  let ponzPoints = [0, 40, 20, 10, 5, 2];
-  if (distance > 5) {
-    return 1;
-  } else {
-    return ponzPoints[distance];
-  }
-};
+// let pointsModel = distance => {
+//   let ponzPoints = [0, 40, 20, 10, 5, 2];
+//   if (distance > 5) {
+//     return 1;
+//   } else {
+//     return ponzPoints[distance];
+//   }
+// };
 
-let updateAncestorPoints = (parentId, createdUserLevel) => {
-  let points;
-  console.log("ancestor points parentId", parentId);
-  return User.findById(parentId)
-    .then(parent => {
-      points = pointsModel(createdUserLevel - parent.level);
-      parent.points += parseInt(points);
-      return parent.save();
-    })
-    .then(result => {
-      if (result.parentId) {
-        return updateAncestorPoints(result.parentId, createdUserLevel);
-      } else {
-        console.log("exiting updateAncestorPoints");
-      }
-    });
-};
+// let updateAncestorPoints = (parentId, createdUserLevel) => {
+//   let points;
+//   console.log("ancestor points parentId", parentId);
+//   return User.findById(parentId)
+//     .then(parent => {
+//       points = pointsModel(createdUserLevel - parent.level);
+//       parent.points += parseInt(points);
+//       return parent.save();
+//     })
+//     .then(result => {
+//       if (result.parentId) {
+//         return updateAncestorPoints(result.parentId, createdUserLevel);
+//       } else {
+//         console.log("exiting updateAncestorPoints");
+//       }
+//     });
+// };
+
+const updateAncestorPoints = require("../services/point_setter");
 
 router.post("/register/:id", (req, res, next) => {
   const {username, password} = req.body;
@@ -89,21 +91,20 @@ router.post("/register/:id", (req, res, next) => {
     points,
     level
   });
-  user.save((err, user) => {
+  user.save((err, createdUser) => {
     User.findByIdAndUpdate(parentId, {
-      $push: {children: user._id}
+      $push: {children: createdUser._id}
     })
       .then(parentUser => {
         let newUserLevel = parentUser.level + 1;
-        user.level = newUserLevel;
-        return user.save();
+        createdUser.level = newUserLevel;
+        return createdUser.save();
       })
       .then(updatedUser => {
         updateAncestorPoints(
           updatedUser.parentId,
           updatedUser.level
         ).then(() => {
-          console.log("entered res scope");
           req.login(updatedUser, function(err) {
             if (err) {
               return next(err);
