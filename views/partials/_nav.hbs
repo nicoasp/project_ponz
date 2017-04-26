@@ -3,4 +3,16 @@
     <img src="http://kitvision.kondorweb.co.uk/wp-content/uploads/2016/12/repeat_icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
     Ponz.io
   </a>
+  <ul class="nav navbar-nav navbar-right">
+	  {{#if user}}
+		  <li>
+		    <a href="/">
+		      {{user.email}}
+		    </a>
+		  </li>
+		  <li>
+		    <a href="/logout">Log Out</a>
+		  </li>
+	  {{/if}}
+  </ul>
 </nav>

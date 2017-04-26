@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
@@ -7,8 +8,9 @@
     "express-session": "^1.15.2",
     "flash": "^1.1.0",
     "mongoose": "^4.9.6",
-    "passport": "^0.3.2"
-
+    "mongoose-unique-validator": "^1.0.5",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0"
   },
   "name": "ponz.io",
   "version": "1.0.0",
