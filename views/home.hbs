@@ -1,7 +1,8 @@
-
-</div>
-	<h4>Your referral link is <a href="http://localhost:3000/register/{{user._id}}">http://localhost:3000/register/{{user._id}}</a></h4>
-	<p>Share this link with your friends to ponvert them!</p>
+<div class="row">
+<div class="col-sm-8 col-offset-2">
+  	<h4>Your referral link is <a href="http://localhost:3000/register/{{user._id}}">http://localhost:3000/register/{{user._id}}</a></h4>
+  	<p>Share this link with your friends to ponvert them!</p>
+  </div>
 </div>
 
 <p>Ponz Pointz: {{user.points}}</p>
@@ -9,21 +10,26 @@
 
 <p>Children:</p>
 
-<ul>
+<div class="row">
+<div class="col-sm-8 col-offset-2">
+
+
+</ul>
+<ul class="list-group">
 	{{#each user.children as |child1|}}
-		<li>40P! {{child1.username}} ponverted on {{child1.createdAt}}</li>
+		<li class="list-group-item" style="width: 45%"><span class="badge">40</span> {{child1.username}} ponverted on {{child1.prettydate}}</li>
 		<ul>
 		{{#each child1.children as |child2|}}
-			<li>20P! {{child2.username}} ponverted on {{child2.createdAt}}</li>
+			<li class="list-group-item" style="width: 50%"><span class="badge">20</span> {{child2.username}} ponverted on {{child2.prettydate}}</li>
 			<ul>
 			{{#each child2.children as |child3|}}
-				<li>10P! {{child3.username}} ponverted on {{child3.createdAt}}</li>
+				<li class="list-group-item" style="width: 55%"><span class="badge">10</span> {{child3.username}} ponverted on {{child3.prettydate}}</li>
 			{{/each}}
-			</ul>	
+			</ul>
 		{{/each}}
 		</ul>
 	{{/each}}
 </ul>
 
-
-
+</div>
+</div>

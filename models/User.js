@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const uniqueValidator = require("mongoose-unique-validator");
 const Schema = mongoose.Schema;
+const moment = require("moment");
 
 const UserSchema = new Schema(
   {
@@ -24,6 +25,10 @@ const UserSchema = new Schema(
 );
 
 UserSchema.plugin(uniqueValidator);
+
+UserSchema.virtual("prettydate").get(function() {
+  return moment(this.createdAt).format("MM-DD-YYYY");
+});
 
 UserSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.passwordHash);
