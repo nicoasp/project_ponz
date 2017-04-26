@@ -11,6 +11,7 @@ const passport = require("passport");
 //Login Routes
 ////
 router.get("/", (req, res) => {
+  
   if (req.user) {
     res.render("home", {user: req.user});
   } else {
@@ -42,9 +43,12 @@ router.post("/register/:id", (req, res, next) => {
   const children = [];
   const user = new User({username, password, children});
   user.save((err, user) => {
-    User.findByIdandUpdate(referrerId, {
-      $push: {$children: user.id}
+    console.log(err);
+    console.log("saved new user", user);
+    User.findByIdAndUpdate(referrerId, {
+      $push: {"children": user._id}
     }).then(updatedUser => {
+      console.log("updated parent user", updatedUser);
       req.login(user, function(err) {
         if (err) {
           return next(err);

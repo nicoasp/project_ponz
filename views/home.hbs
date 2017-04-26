@@ -1,1 +1,26 @@
-<h1>hello</h1>
+
+</div>
+	<h4>Your referral link is <a href="http://localhost:3000/register/{{user._id}}">http://localhost:3000/register/{{user._id}}</a></h4>
+	<p>Share this link with your friends to ponvert them!</p>
+</div>
+
+<p>Children:</p>
+
+<ul>
+{{#each user.children as |child|}}
+<li>{{child}}</li>
+{{/each}}
+</ul>
+
+
+
+{{!-- {{#each xs as |x|}}
+	<li>{{x}}</li>
+	{{#each x.ys as |y|}}
+		<li>{{y}}</li>
+		{{#each y.zs as |z|}}
+			<li>{{z}}</li>
+			
+		{{/each}}			
+	{{/each}}	
+{{/each}} --}}

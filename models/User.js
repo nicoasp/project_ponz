@@ -19,6 +19,9 @@ const UserSchema = new Schema(
 
 UserSchema.plugin(uniqueValidator);
 
+
+
+
 UserSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.passwordHash);
 };
