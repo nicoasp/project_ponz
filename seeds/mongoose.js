@@ -10,7 +10,10 @@ User.create(
   {
     username: "owner",
     password: "owner",
-    children: []
+    children: [],
+    level: 1,
+    parentId: null,
+    points: 0
   },
   function(err) {
     console.log("owner user created");

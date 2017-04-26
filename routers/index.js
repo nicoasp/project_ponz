@@ -36,6 +36,39 @@ router.post(
   })
 );
 
+let pointsModel = distance => {
+  let ponzPoints = [0, 40, 20, 10, 5, 2];
+  if (distance > 5) {
+    return 1;
+  } else {
+    return ponzPoints[distance];
+  }
+};
+
+let updateAncestorPoints = (parentId, createdUserLevel) => {
+  return new Promise(function(resolve, reject) {
+    let points;
+    User.findById(parentId)
+      .then(parent => {
+        points = pointsModel(createdUserLevel - parent.level);
+        console.log("points log", points);
+        parent.points += parseInt(points);
+        return parent.save();
+      })
+      .then(result => {
+        console.log(err);
+        if (!result.parentId === null) {
+          updateAncestorPoints(result.parentId, createdUserLevel);
+        } else {
+          resolve();
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+};
+
 router.post("/register/:id", (req, res, next) => {
   referrerId = req.params.id;
   const {username, password} = req.body;
@@ -47,16 +80,21 @@ router.post("/register/:id", (req, res, next) => {
     console.log("saved new user", user);
     User.findByIdAndUpdate(referrerId, {
       $push: {children: user._id}
-    }).then(updatedUser => {
-      user.level = updatedUser.level + 1;
-      console.log("updated parent user", updatedUser);
-      req.login(user, function(err) {
-        if (err) {
-          return next(err);
-        }
-        return res.redirect("/");
+    })
+      .then(updatedUser => {
+        return User.findByIdAndUpdate(user._id, {level: updatedUser.level + 1});
+      })
+      .then(updatedUser => {
+        return updateAncestorPoints(updatedUser.parentId, updatedUser.level);
+      })
+      .then(() => {
+        req.login(user, function(err) {
+          if (err) {
+            return next(err);
+          }
+          return res.redirect("/");
+        });
       });
-    });
   });
 });
 
