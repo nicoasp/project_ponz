@@ -34,6 +34,14 @@ UserSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.passwordHash);
 };
 
+UserSchema.methods.populateChildren = async function() {
+  let user = await User.findByID(this._id).populate(children);
+  user.children.map(async child => {
+    return await child.populateChildren();
+  });
+  return user;
+};
+
 UserSchema.virtual("password")
   .get(function() {
     return this._password;

@@ -12,19 +12,9 @@ const passport = require("passport");
 ////
 router.get("/", (req, res) => {
   if (req.user) {
-    User.findById(req.user._id)
-      .populate({
-        path: "children",
-        populate: {
-          path: "children",
-          populate: {
-            path: "children"
-          }
-        }
-      })
-      .then(user => {
-        res.render("home", {user});
-      });
+    let user = User.findById(req.user._id).populateChildren();
+    console.log(user);
+    res.render("home", {user});
   } else {
     res.redirect("/login");
   }
