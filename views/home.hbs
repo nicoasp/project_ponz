@@ -25,21 +25,7 @@
 		<ul class="list-group">
 			{{#each user.children as |child1|}}
 				<li class="list-group-item" style="width: 35%"><span class="badge">40</span> {{child1.username}} ponverted on {{child1.prettydate}}</li>
-				<ul>
-				{{#each child1.children as |child2|}}
-					<li class="list-group-item" style="width: 40%"><span class="badge">20</span> {{child2.username}} ponverted on {{child2.prettydate}}</li>
-					<ul>
-					{{#each child2.children as |child3|}}
-						<li class="list-group-item" style="width: 45%"><span class="badge">10</span> {{child3.username}} ponverted on {{child3.prettydate}}</li>
-            <ul>
-  					{{#each child3.children as |child4|}}
-  						<li class="list-group-item" style="width: 50%"><span class="badge">5</span> {{child4.username}} ponverted on {{child4.prettydate}}</li>
-  					{{/each}}
-  					</ul>
-					{{/each}}
-					</ul>
-				{{/each}}
-				</ul>
+				{{> ponvert_nesting children = user.children}}
 			{{/each}}
 		</ul>
   </div>

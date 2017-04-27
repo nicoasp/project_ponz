@@ -35,10 +35,12 @@ UserSchema.methods.validPassword = function(password) {
 };
 
 UserSchema.methods.populateChildren = async function() {
-  let user = await User.findByID(this._id).populate(children);
-  user.children.map(async child => {
-    return await child.populateChildren();
-  });
+  let user = await User.findById(this._id).populate("children");
+  user.children = await Promise.all(
+    user.children.map(child => {
+      return child.populateChildren();
+    })
+  );
   return user;
 };
 

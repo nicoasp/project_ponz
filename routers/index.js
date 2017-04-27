@@ -10,10 +10,9 @@ const passport = require("passport");
 ////
 //Login Routes
 ////
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
   if (req.user) {
-    let user = User.findById(req.user._id).populateChildren();
-    console.log(user);
+    let user = await req.user.populateChildren();
     res.render("home", {user});
   } else {
     res.redirect("/login");
