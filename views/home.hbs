@@ -23,10 +23,9 @@
   </div>
   <div class="panel-body">
 		<ul class="list-group">
-			{{#each user.children as |child1|}}
-				<li class="list-group-item" style="width: 35%"><span class="badge">40</span> {{child1.username}} ponverted on {{child1.prettydate}}</li>
-				{{> ponvert_nesting children = user.children}}
-			{{/each}}
+
+				{{> ponvert_nesting children=user.children user=user}}
+
 		</ul>
   </div>
 </div>

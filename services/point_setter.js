@@ -1,13 +1,7 @@
 const mongoose = require("mongoose");
 const {User} = require("../models");
+const pointsModel = require("./points_model");
 
-let pointsModel = distance => {
-  let ponzPoints = [0, 40, 20, 10, 5, 2];
-  if (distance > 5) {
-    return 1;
-  }
-  return ponzPoints[distance];
-};
 
 let updateAncestorPoints = (parentId, createdUserLevel) => {
   return User.findById(parentId)

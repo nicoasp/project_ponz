@@ -67,21 +67,24 @@ passport.deserializeUser(function(id, done) {
 });
 
 
-
-
-
 ////
 //Handlebars
 ////
-const hbs = require("express-handlebars");
+const exphbs = require("express-handlebars");
+
+const getPoints = require("./helpers/hbs_get_points");
 app.engine(
   "hbs",
-  hbs({
+  exphbs({
     defaultLayout: "application",
     partialsDir: "views/partials",
-    extname: ".hbs"
+    extname: ".hbs",
+    helpers: { getPoints }
   })
 );
+
+
+
 app.set("view engine", "hbs");
 
 ////
