@@ -14,12 +14,12 @@ const UserSchema = new Schema(
         ref: "User"
       }
     ],
-    level: {type: Number},
+    level: {type: Number, default: 1},
     parentId: {
       type: Schema.Types.ObjectId,
       ref: "User"
     },
-    points: {type: Number}
+    points: {type: Number, default: 0}
   },
   {timestamps: true}
 );

@@ -12,19 +12,19 @@ const passport = require("passport");
 ////
 router.get("/", (req, res) => {
   if (req.user) {
-  User.findById(req.user._id)
-    .populate({
-      path: 'children',
-      populate: {
-        path: 'children',
+    User.findById(req.user._id)
+      .populate({
+        path: "children",
         populate: {
-          path: 'children'
+          path: "children",
+          populate: {
+            path: "children"
+          }
         }
-      }
-    })
-    .then(user => {
-      res.render("home", { user });
-    })      
+      })
+      .then(user => {
+        res.render("home", {user});
+      });
   } else {
     res.redirect("/login");
   }
@@ -52,50 +52,37 @@ let pointsModel = distance => {
   let ponzPoints = [0, 40, 20, 10, 5, 2];
   if (distance > 5) {
     return 1;
-  } else {
-    return ponzPoints[distance];
   }
+  return ponzPoints[distance];
 };
 
 let updateAncestorPoints = (parentId, createdUserLevel) => {
-  let points;
-  console.log("ancestor points parentId", parentId);
   return User.findById(parentId)
     .then(parent => {
-      points = pointsModel(createdUserLevel - parent.level);
-      parent.points += parseInt(points);
+      parent.points += pointsModel(createdUserLevel - parent.level);
       return parent.save();
     })
     .then(result => {
       if (result.parentId) {
         return updateAncestorPoints(result.parentId, createdUserLevel);
-      } else {
-        console.log("exiting updateAncestorPoints");
       }
     });
 };
 
 router.post("/register/:id", (req, res, next) => {
   const {username, password} = req.body;
-  const children = [];
   const parentId = req.params.id;
-  const points = 0;
-  const level = 1;
   const user = new User({
     username,
     password,
-    children,
-    parentId,
-    points,
-    level
+    parentId
   });
   user.save((err, user) => {
     User.findByIdAndUpdate(parentId, {
       $push: {children: user._id}
     })
       .then(parentUser => {
-        let newUserLevel = parentUser.level + 1;
-        user.level = newUserLevel;
+        user.level = parentUser.level + 1;
         return user.save();
       })
       .then(updatedUser => {
@@ -103,7 +90,6 @@ router.post("/register/:id", (req, res, next) => {
           updatedUser.parentId,
           updatedUser.level
         ).then(() => {
-          console.log("entered res scope");
           req.login(updatedUser, function(err) {
             if (err) {
               return next(err);
