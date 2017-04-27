@@ -48,32 +48,6 @@ router.post(
   })
 );
 
-// let pointsModel = distance => {
-//   let ponzPoints = [0, 40, 20, 10, 5, 2];
-//   if (distance > 5) {
-//     return 1;
-//   } else {
-//     return ponzPoints[distance];
-//   }
-// };
-
-// let updateAncestorPoints = (parentId, createdUserLevel) => {
-//   let points;
-//   console.log("ancestor points parentId", parentId);
-//   return User.findById(parentId)
-//     .then(parent => {
-//       points = pointsModel(createdUserLevel - parent.level);
-//       parent.points += parseInt(points);
-//       return parent.save();
-//     })
-//     .then(result => {
-//       if (result.parentId) {
-//         return updateAncestorPoints(result.parentId, createdUserLevel);
-//       } else {
-//         console.log("exiting updateAncestorPoints");
-//       }
-//     });
-// };
 
 const updateAncestorPoints = require("../services/point_setter");
 
