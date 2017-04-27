@@ -49,6 +49,7 @@ router.post(
 );
 
 const updateAncestorPoints = require("../services/point_setter");
+
 router.post("/register/:id", (req, res, next) => {
   const {username, password} = req.body;
   const parentId = req.params.id;
@@ -57,9 +58,9 @@ router.post("/register/:id", (req, res, next) => {
     password,
     parentId
   });
-  user.save((err, user) => {
+  user.save((err, createdUser) => {
     User.findByIdAndUpdate(parentId, {
-      $push: {children: user._id}
+      $push: {children: createdUser._id}
     })
       .then(parentUser => {
         user.level = parentUser.level + 1;
